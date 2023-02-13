@@ -129,4 +129,7 @@ dmypy.json
 .pyre/
 
 #custom
+temp_catch_delete_if_not_needed
+.temp_catch_delete_if_not_needed
+.temp_catch_delete_if_not_needed/
 temp_catch_delete_if_not_needed/
