@@ -37,7 +37,6 @@ async def search(Title,params: Search_Arguments = Depends(Search_Arguments)):
     result = wattped.search_books(Title,completed=params.completed,
                                 mature=params.mature,free=params.free,
                                 paid=params.paid,limit=params.limit)
-    print(params.__str__())
     return result
 
 
