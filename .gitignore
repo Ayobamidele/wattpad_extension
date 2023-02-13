@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#custom
+temp_catch_delete_if_not_needed/
