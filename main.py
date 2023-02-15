@@ -2,10 +2,20 @@ import uvicorn
 from fastapi import FastAPI, Depends
 from wattpad_scraper import Wattpad
 from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 wattped = Wattpad()
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
