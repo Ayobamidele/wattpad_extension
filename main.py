@@ -1,9 +1,10 @@
 import uvicorn
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from wattpad_scraper import Wattpad
-from typing import Optional
+from typing import Optional, Literal
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from fastapi.responses import FileResponse
 
 app = FastAPI()
 wattped = Wattpad()
@@ -31,7 +32,7 @@ async def get_book_url(book_url):
     return result
 
 
-class params(BaseModel):
+class search_params(BaseModel):
     completed: Optional[bool] = True
     mature: Optional[bool] = True
     free: Optional[bool] = True
@@ -39,16 +40,25 @@ class params(BaseModel):
     start: Optional[int] = 0
     limit: Optional[int] = 10
 
-
+class book_params(BaseModel):
+    url: Optional[str]
+    file_type: Literal["pdf", "epub", "txt"]
 
 @app.post("/search/{query}")
-async def search(query, params: params):
-    print(params.json())
+async def search(query: str, search_params: search_params):
     result = wattped.search_books(query,
-                                completed=params.completed,mature=params.mature,
-                                free=params.free,paid=params.paid,
-                                start=params.start,limit=params.limit)
+                                completed=search_params.completed,mature=search_params.mature,
+                                free=search_params.free,paid=search_params.paid,
+                                start=search_params.start,limit=search_params.limit)
     return result
+
+@app.post("/book/download")
+async def download_book(book_params: book_params):
+    book = wattped.get_story(book_params.url)
+    headers = {'Content-Disposition': f'attachment; filename="{book.title}"'}
+    # result = 
+    return FileResponse(book.save(f"{book.title}.{book_params.file_type}"), headers=headers, media_type="file/epub")
+    # return result
 
 
 if __name__ == "__main__":
