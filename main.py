@@ -34,19 +34,21 @@ class Search_Arguments:
     
     def __init__(self, completed: Optional[bool] = True, mature:  Optional[bool] = True,
                         free:  Optional[bool] = True, paid:  Optional[bool] = True,
-                        limit:  Optional[int] = 10):
-        self.completed = completed,
+                        start : Optional[int] = 0 , limit:  Optional[int] = 10):
+        self.completed = completed
         self.mature = mature
-        self.free = free,
-        self.paid = paid,
+        self.free = free
+        self.paid = paid
+        self.start = start
         self.limit = limit
 
 
-@app.post("/search/{Title}")
-async def search(Title,params: Search_Arguments = Depends(Search_Arguments)):
-    result = wattped.search_books(Title,completed=params.completed,
-                                mature=params.mature,free=params.free,
-                                paid=params.paid,limit=params.limit)
+@app.post("/search/{query}")
+async def search(query,params: Search_Arguments = Depends(Search_Arguments)):
+    result = wattped.search_books(query,
+                                completed=params.completed,mature=params.mature,
+                                free=params.free,paid=params.paid,
+                                start=params.start,limit=params.limit)
     return result
 
 
