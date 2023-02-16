@@ -3,6 +3,7 @@ from fastapi import FastAPI, Depends
 from wattpad_scraper import Wattpad
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI()
 wattped = Wattpad()
@@ -30,21 +31,19 @@ async def get_book_url(book_url):
     return result
 
 
-class Search_Arguments:
-    
-    def __init__(self, completed: Optional[bool] = True, mature:  Optional[bool] = True,
-                        free:  Optional[bool] = True, paid:  Optional[bool] = True,
-                        start : Optional[int] = 0 , limit:  Optional[int] = 10):
-        self.completed = completed
-        self.mature = mature
-        self.free = free
-        self.paid = paid
-        self.start = start
-        self.limit = limit
+class params(BaseModel):
+    completed: Optional[bool] = True
+    mature: Optional[bool] = True
+    free: Optional[bool] = True
+    paid: Optional[bool] = True
+    start: Optional[int] = 0
+    limit: Optional[int] = 10
+
 
 
 @app.post("/search/{query}")
-async def search(query,params: Search_Arguments = Depends(Search_Arguments)):
+async def search(query, params: params):
+    print(params.json())
     result = wattped.search_books(query,
                                 completed=params.completed,mature=params.mature,
                                 free=params.free,paid=params.paid,
