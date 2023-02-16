@@ -56,9 +56,7 @@ async def search(query: str, search_params: search_params):
 async def download_book(book_params: book_params):
     book = wattped.get_story(book_params.url)
     headers = {'Content-Disposition': f'attachment; filename="{book.title}"'}
-    # result = 
     return FileResponse(book.save(f"{book.title}.{book_params.file_type}"), headers=headers, media_type="file/epub")
-    # return result
 
 
 if __name__ == "__main__":
