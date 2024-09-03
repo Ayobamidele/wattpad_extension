@@ -10,7 +10,7 @@ import json
 class FileBin:
 	def __init__(self, file_path):
 		self.file_path = file_path
-		self.file_name = os.path.basename(file_path)
+		self.file_name = os.path.basename(file_path).encode('latin-1', errors='xmlcharrefreplace')
 		self.bin = '09cefunin2hpufcs'
 		self.file_size = str(os.path.getsize(file_path))
 		print(f"File size is {self.file_size} bytes")
@@ -93,18 +93,22 @@ class FileBin:
 		response = requests.get(f'https://filebin.net/{self.bin}/{self.file_name}', headers=headers)
 		if response.status_code == 200:
 			return response.url
+		else:
+			return f'https://filebin.net/{self.bin}/{self.file_name}'
+		
+		
 
 
 
 def delete_file(file_path: str):
-    try:
-        os.remove(file_path)
-        print(f"File {file_path} deleted successfully.")
-    except FileNotFoundError:
-        print(f"File {file_path} not found.")
-    except PermissionError:
-        print(f"Permission denied to delete {file_path}.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+	try:
+		os.remove(file_path)
+		print(f"File {file_path} deleted successfully.")
+	except FileNotFoundError:
+		print(f"File {file_path} not found.")
+	except PermissionError:
+		print(f"Permission denied to delete {file_path}.")
+	except Exception as e:
+		print(f"An error occurred: {e}")
 
 
