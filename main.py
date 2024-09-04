@@ -1,7 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 from wattpad_scraper import Wattpad
-from typing import Optional, Literal
+from typing import Optional
+import os
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from services.storage import FileBin, delete_file
@@ -18,6 +19,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+UPLOAD_DIRECTORY = "/tmp/uploads"
+
+if not os.path.exists(UPLOAD_DIRECTORY):
+    os.makedirs(UPLOAD_DIRECTORY)
+    
 
 @app.get("/")
 async def root():
@@ -55,7 +62,7 @@ async def download_book(book_params: book_params):
     wt = Wattpad()
     book = wt.get_story(book_params.url)
     # headers = {'Content-Disposition': f'attachment; filename="{book.title}"'}
-    file_path = book.save()
+    file_path = book.save(loc=UPLOAD_DIRECTORY)
     filebin = FileBin(file_path)
     download_url = filebin.upload()
     if download_url:
