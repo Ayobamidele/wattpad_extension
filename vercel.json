@@ -22,7 +22,7 @@
 		},
 		{
 			"src": "/book/download",
-			"dest": "api/upload.py"
+			"dest": "main.py"
 		},
 		{
 			"src": "/(.*)",
