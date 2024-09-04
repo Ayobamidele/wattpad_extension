@@ -19,14 +19,6 @@
 		{
 			"src": "/static/(.*)",
 			"dest": "/static/$1"
-		},
-		{
-			"src": "/book/download",
-			"dest": "main.py"
-		},
-		{
-			"src": "/(.*)",
-			"dest": "main.py"
 		}
 	]
 	
